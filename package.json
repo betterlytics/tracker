@@ -1,0 +1,33 @@
+{
+  "name": "@betterlytics/tracker",
+  "version": "0.1.0",
+  "description": "Privacy-focused, cookieless analytics for your website",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "analytics",
+    "privacy",
+    "cookieless",
+    "tracking",
+    "web-analytics",
+    "betterlytics"
+  ],
+  "author": "Betterlytics",
+  "license": "MIT",
+  "homepage": "https://betterlytics.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/betterlytics/tracker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/betterlytics/tracker/issues"
+  },
+  "files": [
+    "src/index.js",
+    "src/index.d.ts",
+    "analytics.js"
+  ]
+}

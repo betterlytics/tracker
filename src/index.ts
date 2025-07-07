@@ -1,4 +1,27 @@
-function Betterlytics(options) {
+export interface BetterlyticsConfig {
+  /** Your unique site identifier from Betterlytics */
+  siteId: string;
+  /** Custom tracking server URL (defaults to https://betterlytics.io/track) */
+  serverUrl?: string;
+  /** Custom analytics script URL (defaults to https://betterlytics.io/analytics.js) */
+  scriptUrl?: string;
+  /** Array of URL patterns to normalize (e.g., ['/users/*', '/products/*']) */
+  dynamicUrls?: string[];
+}
+
+export interface EventProperties {
+  [key: string]: string | number | boolean;
+}
+
+export type TrackingFunction = (eventName: string, eventProps?: EventProperties) => void;
+
+declare global {
+  interface Window {
+    betterlytics?: TrackingFunction & { q?: any[] };
+  }
+}
+
+function Betterlytics(options: BetterlyticsConfig): TrackingFunction {
   if (!options || !options.siteId) {
     throw new Error("Betterlytics: siteId is required");
   }
@@ -34,16 +57,16 @@ function Betterlytics(options) {
   window.betterlytics =
     window.betterlytics ||
     function () {
-      window.betterlytics.q = window.betterlytics.q || [];
-      window.betterlytics.q.push(arguments);
+      window.betterlytics!.q = window.betterlytics!.q || [];
+      window.betterlytics!.q.push(arguments);
     };
 
   // Return the tracking function
-  return function (eventName, eventProps) {
+  return function (eventName: string, eventProps?: EventProperties) {
     if (window.betterlytics) {
       window.betterlytics(eventName, eventProps);
     }
   };
 }
 
-module.exports = Betterlytics;
+export default Betterlytics;

@@ -1,11 +1,26 @@
 {
   "name": "@betterlytics/tracker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Privacy-focused, cookieless analytics for your website",
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
   },
   "keywords": [
     "analytics",
@@ -26,7 +41,6 @@
     "url": "https://github.com/betterlytics/tracker/issues"
   },
   "files": [
-    "src/index.js",
-    "src/index.d.ts"
+    "dist"
   ]
 }

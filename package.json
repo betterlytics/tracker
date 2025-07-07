@@ -27,7 +27,6 @@
   },
   "files": [
     "src/index.js",
-    "src/index.d.ts",
-    "analytics.js"
+    "src/index.d.ts"
   ]
 }

@@ -91,7 +91,7 @@ betterlytics("purchase", {
 
 ### Required Options
 
-- `siteId`: Your unique site identifier from Betterlytics
+- `siteId`: Your unique site identifier from your [Betterlytics Dashboard](https://betterlytics.io)
 
 ### Optional Options
 

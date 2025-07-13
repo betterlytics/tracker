@@ -7,23 +7,55 @@ export interface BetterlyticsConfig {
   scriptUrl?: string;
   /** Array of URL patterns to normalize (e.g., ['/users/*', '/products/*']) */
   dynamicUrls?: string[];
+  /** Debug */
+  debug?: boolean;
 }
 
-export interface EventProperties {
-  [key: string]: string | number | boolean;
-}
+type InitFunction = (options: BetterlyticsConfig) => void;
+type TrackingFunction = (eventName: string, eventProps?: object) => void;
 
-export type TrackingFunction = (eventName: string, eventProps?: EventProperties) => void;
+export type Betterlytics = {
+  init: InitFunction;
+  event: TrackingFunction;
+};
 
 declare global {
   interface Window {
-    betterlytics?: TrackingFunction & { q?: any[] };
+    betterlytics?: {
+      event: TrackingFunction;
+
+      // Preinitalized events
+      q?: IArguments[];
+    };
   }
 }
 
-function Betterlytics(options: BetterlyticsConfig): TrackingFunction {
+function isInitialized() {
+  return Boolean(document.querySelector('script[src*="analytics.js"]'));
+}
+
+function setupPreinitalizedQueue() {
+  if (!window.betterlytics || !window.betterlytics.q) {
+    window.betterlytics = {
+      q: window.betterlytics?.q || [],
+      event: function () {
+        window.betterlytics!.q!.push(arguments);
+      },
+    };
+  }
+}
+
+function init(options: BetterlyticsConfig) {
   if (!options || !options.siteId) {
     throw new Error("Betterlytics: siteId is required");
+  }
+
+  // Check if script is already loaded
+  if (isInitialized()) {
+    if (options.debug) {
+      console.warn("Betterlytics: Already initialized");
+    }
+    return;
   }
 
   const config = {
@@ -33,40 +65,27 @@ function Betterlytics(options: BetterlyticsConfig): TrackingFunction {
     dynamicUrls: options.dynamicUrls || [],
   };
 
-  // Check if script is already loaded
-  if (document.querySelector('script[src*="analytics.js"]')) {
-    console.warn("Betterlytics: Already initialized");
-    return window.betterlytics || function () {};
-  }
+  // Preload event tracking
+  setupPreinitalizedQueue();
 
-  // Create and inject the script
+  // Create and inject the analytics.js script
   const script = document.createElement("script");
   script.async = true;
   script.src = config.scriptUrl;
   script.setAttribute("data-site-id", config.siteId);
   script.setAttribute("data-server-url", config.serverUrl);
-
-  if (config.dynamicUrls.length > 0) {
-    script.setAttribute("data-dynamic-urls", config.dynamicUrls.join(","));
-  }
-
-  // Add script to head
+  script.setAttribute("data-dynamic-urls", config.dynamicUrls.join(","));
   document.head.appendChild(script);
-
-  // Initialize the queue for events sent before script loads
-  window.betterlytics =
-    window.betterlytics ||
-    function () {
-      window.betterlytics!.q = window.betterlytics!.q || [];
-      window.betterlytics!.q.push(arguments);
-    };
-
-  // Return the tracking function
-  return function (eventName: string, eventProps?: EventProperties) {
-    if (window.betterlytics) {
-      window.betterlytics(eventName, eventProps);
-    }
-  };
 }
 
-export default Betterlytics;
+function event(eventName: string, eventProps?: object) {
+  if (!isInitialized()) {
+    setupPreinitalizedQueue();
+  }
+  window.betterlytics?.event(eventName, eventProps);
+}
+
+export default {
+  init,
+  event,
+} as Betterlytics;

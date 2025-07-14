@@ -9,7 +9,7 @@ export interface BetterlyticsConfig {
   debug?: boolean;
 }
 
-type InitFunction = (siteId: string, options: BetterlyticsConfig) => void;
+type InitFunction = (siteId: string, options?: BetterlyticsConfig) => void;
 type TrackingFunction = (eventName: string, eventProps?: object) => void;
 
 export type Betterlytics = {

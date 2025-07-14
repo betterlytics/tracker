@@ -1,6 +1,4 @@
 export interface BetterlyticsConfig {
-  /** Your unique site identifier from Betterlytics */
-  siteId: string;
   /** Custom tracking server URL (defaults to https://betterlytics.io/track) */
   serverUrl?: string;
   /** Custom analytics script URL (defaults to https://betterlytics.io/analytics.js) */
@@ -11,7 +9,7 @@ export interface BetterlyticsConfig {
   debug?: boolean;
 }
 
-type InitFunction = (options: BetterlyticsConfig) => void;
+type InitFunction = (siteId: string, options: BetterlyticsConfig) => void;
 type TrackingFunction = (eventName: string, eventProps?: object) => void;
 
 export type Betterlytics = {
@@ -45,8 +43,8 @@ function setupPreinitalizedQueue() {
   }
 }
 
-function init(options: BetterlyticsConfig) {
-  if (!options || !options.siteId) {
+function init(siteId: string, options: BetterlyticsConfig = {}) {
+  if (!siteId) {
     throw new Error("Betterlytics: siteId is required");
   }
 
@@ -59,7 +57,7 @@ function init(options: BetterlyticsConfig) {
   }
 
   const config = {
-    siteId: options.siteId,
+    siteId: siteId,
     serverUrl: options.serverUrl || "https://betterlytics.io/track",
     scriptUrl: options.scriptUrl || "https://betterlytics.io/analytics.js",
     dynamicUrls: options.dynamicUrls || [],

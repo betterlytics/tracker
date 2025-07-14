@@ -27,15 +27,23 @@ Import and initialize Betterlytics in your application:
 ```javascript
 import betterlytics from "@betterlytics/tracker";
 
-// Initialize betterlytics
-betterlytics.init({
-  siteId: "your-site-id",
-  dynamicUrls: ["/users/*", "/products/*"], // optional
-});
+// Initialize Betterlytics
+betterlytics.init("your-site-id");
 
 // Track custom events
 betterlytics.event("newsletter-signup");
 betterlytics.event("button-click", { button: "cta-header" });
+```
+
+You can also initialize Betterlytics with optional paramters like this:
+
+```javascript
+import betterlytics from "@betterlytics/tracker";
+
+// Initialize Betterlytics with optional configurations
+betterlytics.init("your-site-id", {
+  dynamicUrls: ["/users/*", "/products/*"], // optional
+});
 ```
 
 ### Custom Events
@@ -62,8 +70,7 @@ betterlytics.event("video-play", {
 Dynamic URLs contain variable segments that change based on user context, making them difficult to analyze collectively. Betterlytics supports single (`*`) and double (`**`) wildcards to normalize these URLs. Learn more about [dynamic URLs in our documentation](https://betterlytics.io/docs/integration/dynamic-urls).
 
 ```javascript
-betterlytics.init({
-  siteId: "your-site-id",
+betterlytics.init("your-site-id", {
   dynamicUrls: ["/users/*", "/products/*/reviews", "/blog/**"],
 });
 ```
@@ -75,8 +82,7 @@ Full TypeScript support is included:
 ```typescript
 import betterlytics from "@betterlytics/tracker";
 
-betterlytics.init({
-  siteId: "your-site-id",
+betterlytics.init("your-site-id", {
   dynamicUrls: ["/users/*", "/products/*"],
 });
 

@@ -75,24 +75,6 @@ betterlytics.init("your-site-id", {
 });
 ```
 
-### TypeScript
-
-Full TypeScript support is included:
-
-```typescript
-import betterlytics from "@betterlytics/tracker";
-
-betterlytics.init("your-site-id", {
-  dynamicUrls: ["/users/*", "/products/*"],
-});
-
-// Type-safe event tracking
-betterlytics.event("purchase", {
-  product: "premium-plan",
-  value: 29.99,
-});
-```
-
 ## Configuration
 
 ### Required Options

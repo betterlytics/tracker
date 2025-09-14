@@ -35,7 +35,7 @@ betterlytics.event("newsletter-signup");
 betterlytics.event("button-click", { button: "cta-header" });
 ```
 
-You can also initialize Betterlytics with optional paramaters like this:
+You can also initialize Betterlytics with optional parameters like this:
 
 ```javascript
 import betterlytics from "@betterlytics/tracker";

@@ -35,7 +35,7 @@ betterlytics.event("newsletter-signup");
 betterlytics.event("button-click", { button: "cta-header" });
 ```
 
-You can also initialize Betterlytics with optional paramters like this:
+You can also initialize Betterlytics with optional paramaters like this:
 
 ```javascript
 import betterlytics from "@betterlytics/tracker";
@@ -75,6 +75,39 @@ betterlytics.init("your-site-id", {
 });
 ```
 
+### Web Vitals
+
+Web Vitals tracking is disabled by default. [Web Vitals in our documentation](https://betterlytics.io/docs/integration/web-vitals).
+
+To enable tracking of Core Web Vitals:
+
+```javascript
+betterlytics.init("your-site-id", {
+  enableWebVitals: true,
+});
+```
+
+### Outbound Links
+
+Outbound Links are the external links your users click on on your site.\
+Only the domain of these links are tracked by default. [Outbound Links in our documentation](https://betterlytics.io/docs/integration/outbound-links).
+
+To track the full Outbound Links, and not just the domain:
+
+```javascript
+betterlytics.init("your-site-id", {
+  outboundLinksMode: "full",
+});
+```
+
+To disable Outbound Link tracking:
+
+```javascript
+betterlytics.init("your-site-id", {
+  disableOutboundLinks: true,
+});
+```
+
 ## Configuration
 
 ### Required Options
@@ -86,6 +119,9 @@ betterlytics.init("your-site-id", {
 - `dynamicUrls`: Array of URL patterns to normalize (e.g., `['/users/*', '/products/*']`)
 - `serverUrl`: Custom tracking server URL (defaults to `https://betterlytics.io/track`)
 - `scriptUrl`: Custom analytics script URL (defaults to `https://betterlytics.io/analytics.js`)
+- `enableWebVitals`: Boolean value for enabling Web Vitals tracking (defaults to `false`)
+- `disableOutboundLinks`: Boolean value for disabling Outbound Link tracking (defaults to `false`)
+- `outboundLinksMode`: Mode for what is being tracked for Outbound Links (Options: `"domain" | "full"` defaults to `"domain"`)
 - `debug`: Boolean value for console warnings (defaults to `false`)
 
 ## Links

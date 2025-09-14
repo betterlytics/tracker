@@ -5,6 +5,12 @@ export interface BetterlyticsConfig {
   scriptUrl?: string;
   /** Array of URL patterns to normalize (e.g., ['/users/*', '/products/*']) */
   dynamicUrls?: string[];
+  /** Enable Core Web Vitals tracking */
+  enableWebVitals?: boolean;
+  /** Disable Outbound Link tracking */
+  disableOutboundLinks?: boolean;
+  /** Mode for Outbound Link tracking (defaults to "domain") */
+  outboundLinksMode?: "domain" | "full";
   /** Debug */
   debug?: boolean;
 }
@@ -56,11 +62,15 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     return;
   }
 
+  const toBooleanString = (value: boolean) => (value ? "true" : "false");
   const config = {
     siteId: siteId,
     serverUrl: options.serverUrl || "https://betterlytics.io/track",
     scriptUrl: options.scriptUrl || "https://betterlytics.io/analytics.js",
     dynamicUrls: options.dynamicUrls || [],
+    enableWebVitals: options.enableWebVitals || false,
+    disableOutboundLinks: options.disableOutboundLinks || false,
+    outboundLinksMode: options.outboundLinksMode || "domain",
   };
 
   // Preload event tracking
@@ -73,6 +83,14 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
   script.setAttribute("data-site-id", config.siteId);
   script.setAttribute("data-server-url", config.serverUrl);
   script.setAttribute("data-dynamic-urls", config.dynamicUrls.join(","));
+  script.setAttribute(
+    "data-web-vitals",
+    config.enableWebVitals ? "true" : "false"
+  );
+  script.setAttribute(
+    "data-outbound-links",
+    config.disableOutboundLinks ? "off" : config.outboundLinksMode
+  );
   document.head.appendChild(script);
 }
 

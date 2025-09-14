@@ -62,7 +62,6 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     return;
   }
 
-  const toBooleanString = (value: boolean) => (value ? "true" : "false");
   const config = {
     siteId: siteId,
     serverUrl: options.serverUrl || "https://betterlytics.io/track",

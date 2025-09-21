@@ -50,7 +50,7 @@
   "homepage": "https://betterlytics.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/betterlytics/tracker.git"
+    "url": "git+https://github.com/betterlytics/tracker.git"
   },
   "bugs": {
     "url": "https://github.com/betterlytics/tracker/issues"

@@ -1,5 +1,5 @@
 export interface BetterlyticsConfig {
-  /** Custom tracking server URL (defaults to https://betterlytics.io/track) */
+  /** Custom tracking server URL (defaults to https://betterlytics.io/event) */
   serverUrl?: string;
   /** Custom analytics script URL (defaults to https://betterlytics.io/analytics.js) */
   scriptUrl?: string;
@@ -11,6 +11,20 @@ export interface BetterlyticsConfig {
   disableOutboundLinks?: boolean;
   /** Mode for Outbound Link tracking (defaults to "domain") */
   outboundLinksMode?: "domain" | "full";
+  /** Enable Session Replay */
+  enableSessionReplay?: boolean;
+  /** Indicates consent is already granted; loads replay if sampled (defaults to false) */
+  consentReplay?: boolean;
+  /** Percent of eligible sessions to record (0-100, defaults to 5) */
+  replaySample?: number;
+  /** Minimum recording length required to upload/finalize (defaults to 15s) */
+  replayMinDuration?: number;
+  /** Auto‑stop after this many seconds of inactivity (defaults to 600s) */
+  replayIdleCutoff?: number;
+  /** Hard cap on total recording length (defaults to 1200s) */
+  replayMaxDuration?: number;
+  /** Array of URL patterns where recording is disabled (e.g., ['/users/*', '/products/*']) */
+  disableReplayOnUrls?: string[];
   /** Debug */
   debug?: boolean;
 }
@@ -64,12 +78,19 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
 
   const config = {
     siteId: siteId,
-    serverUrl: options.serverUrl || "https://betterlytics.io/track",
+    serverUrl: options.serverUrl || "https://betterlytics.io/event",
     scriptUrl: options.scriptUrl || "https://betterlytics.io/analytics.js",
     dynamicUrls: options.dynamicUrls || [],
     enableWebVitals: options.enableWebVitals || false,
     disableOutboundLinks: options.disableOutboundLinks || false,
     outboundLinksMode: options.outboundLinksMode || "domain",
+    enableSessionReplay: options.enableSessionReplay || false,
+    consentReplay: options.consentReplay || false,
+    replaySample: options.replaySample || 5,
+    replayMinDuration: options.replayMinDuration || 15,
+    replayIdleCutoff: options.replayIdleCutoff || 600,
+    replayMaxDuration: options.replayMaxDuration || 1200,
+    disableReplayOnUrls: options.disableReplayOnUrls || [],
   };
 
   // Preload event tracking
@@ -82,13 +103,29 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
   script.setAttribute("data-site-id", config.siteId);
   script.setAttribute("data-server-url", config.serverUrl);
   script.setAttribute("data-dynamic-urls", config.dynamicUrls.join(","));
-  script.setAttribute(
-    "data-web-vitals",
-    config.enableWebVitals ? "true" : "false"
-  );
+  script.setAttribute("data-web-vitals", config.enableWebVitals.toString());
   script.setAttribute(
     "data-outbound-links",
-    config.disableOutboundLinks ? "off" : config.outboundLinksMode
+    config.disableOutboundLinks ? "off" : config.outboundLinksMode,
+  );
+  script.setAttribute("data-replay", config.enableSessionReplay.toString());
+  script.setAttribute("data-consent-replay", config.consentReplay.toString());
+  script.setAttribute("data-replay-sample", config.replaySample.toString());
+  script.setAttribute(
+    "data-replay-min-duration",
+    config.replayMinDuration.toString(),
+  );
+  script.setAttribute(
+    "data-replay-idle-cutoff",
+    config.replayIdleCutoff.toString(),
+  );
+  script.setAttribute(
+    "data-replay-max-duration",
+    config.replayMaxDuration.toString(),
+  );
+  script.setAttribute(
+    "data-disable-replay-on-urls",
+    config.disableReplayOnUrls.join(","),
   );
   document.head.appendChild(script);
 }

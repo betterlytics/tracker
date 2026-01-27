@@ -123,10 +123,12 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     "data-replay-max-duration",
     config.replayMaxDuration.toString(),
   );
-  script.setAttribute(
-    "data-disable-replay-on-urls",
-    config.disableReplayOnUrls.join(","),
-  );
+  if (config.disableReplayOnUrls.length > 0) {
+    script.setAttribute(
+      "data-disable-replay-on-urls",
+      config.disableReplayOnUrls.join(","),
+    );
+  }
   document.head.appendChild(script);
 }
 

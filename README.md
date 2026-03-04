@@ -108,6 +108,28 @@ betterlytics.init("your-site-id", {
 });
 ```
 
+### Session Replay
+
+Session Replay is disabled by default. [Session Replay in our documentation](https://betterlytics.io/docs/integration/session-replay).
+
+To enable Session Replay:
+
+```javascript
+betterlytics.init("your-site-id", {
+  enableSessionReplay: true,
+});
+```
+
+You can also configure the replay settings:
+
+```javascript
+betterlytics.init("your-site-id", {
+  enableSessionReplay: true,
+  replaySample: 20,
+  consentReplay: true,
+});
+```
+
 ## Configuration
 
 ### Required Options
@@ -117,11 +139,18 @@ betterlytics.init("your-site-id", {
 ### Optional Options
 
 - `dynamicUrls`: Array of URL patterns to normalize (e.g., `['/users/*', '/products/*']`)
-- `serverUrl`: Custom tracking server URL (defaults to `https://betterlytics.io/track`)
+- `serverUrl`: Custom tracking server URL (defaults to `https://betterlytics.io/event`)
 - `scriptUrl`: Custom analytics script URL (defaults to `https://betterlytics.io/analytics.js`)
 - `enableWebVitals`: Boolean value for enabling Web Vitals tracking (defaults to `false`)
 - `disableOutboundLinks`: Boolean value for disabling Outbound Link tracking (defaults to `false`)
 - `outboundLinksMode`: Mode for what is being tracked for Outbound Links (Options: `"domain" | "full"` defaults to `"domain"`)
+- `enableSessionReplay`: Boolean value for enabling Session Replay (defaults to `false`)
+- `consentReplay`: Boolean value. Indicates consent is already granted (defaults to `false`)
+- `replaySample`: Number (0-100). Percent of eligible sessions to record (defaults to `5`)
+- `replayMinDuration`: Number (seconds). Minimum recording length required to upload/finalize (defaults to `15`)
+- `replayIdleCutoff`: Number (seconds). Auto‑stop after this many seconds of inactivity (defaults to `600`)
+- `replayMaxDuration`: Number (seconds). Hard cap on total recording length (defaults to `1200`)
+- `disableReplayOnUrls`: Array of URL patterns where recording is disabled (defaults to `[]`)
 - `debug`: Boolean value for console warnings (defaults to `false`)
 
 ## Links

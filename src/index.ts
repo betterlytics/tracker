@@ -25,6 +25,12 @@ export interface BetterlyticsConfig {
   replayMaxDuration?: number;
   /** Array of URL patterns where recording is disabled (e.g., ['/users/*', '/products/*']) */
   disableReplayOnUrls?: string[];
+  /** Enables error tracking */
+  trackErrors?: boolean;
+  /** Also captures console.error() calls. Requires trackErrors to be true */
+  trackConsoleErrors?: boolean;
+  /** Captures a replay when an error occurs, even for sessions not sampled for regular recording. Requires enableSessionReplay and consent */
+  replayOnError?: boolean;
   /** Debug */
   debug?: boolean;
 }
@@ -91,6 +97,9 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     replayIdleCutoff: options.replayIdleCutoff || 600,
     replayMaxDuration: options.replayMaxDuration || 1200,
     disableReplayOnUrls: options.disableReplayOnUrls || [],
+    trackErrors: options.trackErrors || false,
+    trackConsoleErrors: options.trackConsoleErrors || false,
+    replayOnError: options.replayOnError || false,
   };
 
   // Preload event tracking
@@ -129,6 +138,12 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
       config.disableReplayOnUrls.join(","),
     );
   }
+  script.setAttribute("data-replay-on-error", config.replayOnError.toString());
+  script.setAttribute("data-track-errors", config.trackErrors.toString());
+  script.setAttribute(
+    "data-track-console-errors",
+    config.trackConsoleErrors.toString(),
+  );
   document.head.appendChild(script);
 }
 

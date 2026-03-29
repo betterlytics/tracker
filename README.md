@@ -130,6 +130,37 @@ betterlytics.init("your-site-id", {
 });
 ```
 
+### Error Tracking
+
+Error tracking is disabled by default. [Error Tracking in our documentation](https://betterlytics.io/docs/integration/errors).
+
+To enable error tracking:
+
+```javascript
+betterlytics.init("your-site-id", {
+  trackErrors: true,
+});
+```
+
+To also capture `console.error()` calls:
+
+```javascript
+betterlytics.init("your-site-id", {
+  trackErrors: true,
+  trackConsoleErrors: true,
+});
+```
+
+To capture a replay when an error occurs, even for sessions not sampled for regular recording:
+
+```javascript
+betterlytics.init("your-site-id", {
+  enableSessionReplay: true,
+  trackErrors: true,
+  replayOnError: true,
+});
+```
+
 ## Configuration
 
 ### Required Options
@@ -151,6 +182,9 @@ betterlytics.init("your-site-id", {
 - `replayIdleCutoff`: Number (seconds). Auto‑stop after this many seconds of inactivity (defaults to `600`)
 - `replayMaxDuration`: Number (seconds). Hard cap on total recording length (defaults to `1200`)
 - `disableReplayOnUrls`: Array of URL patterns where recording is disabled (defaults to `[]`)
+- `trackErrors`: Boolean value for enabling error tracking (defaults to `false`)
+- `trackConsoleErrors`: Boolean value for capturing `console.error()` calls. Requires `trackErrors` to be `true` (defaults to `false`)
+- `replayOnError`: Boolean value for capturing a replay when an error occurs, even for sessions not sampled for regular recording. Requires `enableSessionReplay` and consent (defaults to `false`)
 - `debug`: Boolean value for console warnings (defaults to `false`)
 
 ## Links

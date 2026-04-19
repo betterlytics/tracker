@@ -113,6 +113,7 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     trackErrors: options.trackErrors || false,
     trackConsoleErrors: options.trackConsoleErrors || false,
     replayOnError: options.replayOnError || false,
+    globalProperties: options.globalProperties || {},
   };
 
   // Preload event tracking
@@ -157,12 +158,10 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     "data-track-console-errors",
     config.trackConsoleErrors.toString(),
   );
-  if (options.globalProperties) {
-    script.setAttribute(
-      "data-global-properties",
-      JSON.stringify(options.globalProperties),
-    );
-  }
+  script.setAttribute(
+    "data-global-properties",
+    JSON.stringify(config.globalProperties),
+  );
   document.head.appendChild(script);
 }
 

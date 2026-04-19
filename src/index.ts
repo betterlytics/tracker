@@ -31,22 +31,35 @@ export interface BetterlyticsConfig {
   trackConsoleErrors?: boolean;
   /** Captures a replay when an error occurs, even for sessions not sampled for regular recording. Requires enableSessionReplay and consent */
   replayOnError?: boolean;
+  /** Flat key/value map attached to every event (e.g. { plan: "premium", app_version: "2.1.0" }) */
+  globalProperties?: GlobalProperties;
   /** Debug */
   debug?: boolean;
 }
 
+export type GlobalProperties = Record<string, string | number | boolean>;
+
 type InitFunction = (siteId: string, options?: BetterlyticsConfig) => void;
 type TrackingFunction = (eventName: string, eventProps?: object) => void;
+type SetGlobalPropertiesFunction = (props: GlobalProperties) => void;
+type ClearGlobalPropertiesFunction = () => void;
+type GetGlobalPropertiesFunction = () => GlobalProperties;
 
 export type Betterlytics = {
   init: InitFunction;
   event: TrackingFunction;
+  setGlobalProperties: SetGlobalPropertiesFunction;
+  clearGlobalProperties: ClearGlobalPropertiesFunction;
+  getGlobalProperties: GetGlobalPropertiesFunction;
 };
 
 declare global {
   interface Window {
     betterlytics?: {
       event: TrackingFunction;
+      setGlobalProperties?: SetGlobalPropertiesFunction;
+      clearGlobalProperties?: ClearGlobalPropertiesFunction;
+      getGlobalProperties?: GetGlobalPropertiesFunction;
 
       // Preinitalized events
       q?: IArguments[];
@@ -144,6 +157,12 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     "data-track-console-errors",
     config.trackConsoleErrors.toString(),
   );
+  if (options.globalProperties) {
+    script.setAttribute(
+      "data-global-properties",
+      JSON.stringify(options.globalProperties),
+    );
+  }
   document.head.appendChild(script);
 }
 
@@ -154,7 +173,22 @@ function event(eventName: string, eventProps?: object) {
   window.betterlytics?.event(eventName, eventProps);
 }
 
+function setGlobalProperties(props: GlobalProperties) {
+  window.betterlytics?.setGlobalProperties?.(props);
+}
+
+function clearGlobalProperties() {
+  window.betterlytics?.clearGlobalProperties?.();
+}
+
+function getGlobalProperties(): GlobalProperties {
+  return window.betterlytics?.getGlobalProperties?.() ?? {};
+}
+
 export default {
   init,
   event,
+  setGlobalProperties,
+  clearGlobalProperties,
+  getGlobalProperties,
 } as Betterlytics;

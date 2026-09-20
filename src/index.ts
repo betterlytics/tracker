@@ -61,8 +61,9 @@ declare global {
       clearGlobalProperties?: ClearGlobalPropertiesFunction;
       getGlobalProperties?: GetGlobalPropertiesFunction;
 
-      // Preinitalized events
+      // Preinitalized events and global properties
       q?: IArguments[];
+      gq?: IArguments[];
     };
   }
 }
@@ -75,8 +76,12 @@ function setupPreinitalizedQueue() {
   if (!window.betterlytics || !window.betterlytics.q) {
     window.betterlytics = {
       q: window.betterlytics?.q || [],
+      gq: window.betterlytics?.gq || [],
       event: function () {
         window.betterlytics!.q!.push(arguments);
+      },
+      setGlobalProperties: function () {
+        window.betterlytics!.gq!.push(arguments);
       },
     };
   }
@@ -173,6 +178,9 @@ function event(eventName: string, eventProps?: object) {
 }
 
 function setGlobalProperties(props: GlobalProperties) {
+  if (!isInitialized()) {
+    setupPreinitalizedQueue();
+  }
   window.betterlytics?.setGlobalProperties?.(props);
 }
 

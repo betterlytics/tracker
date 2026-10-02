@@ -55,6 +55,8 @@ export type Betterlytics = {
 
 declare global {
   interface Window {
+    // Set by analytics.js on its first run, whatever its filename or how it was added
+    __betterlytics_analytics_initialized__?: boolean;
     betterlytics?: {
       event: TrackingFunction;
       setGlobalProperties?: SetGlobalPropertiesFunction;
@@ -68,8 +70,14 @@ declare global {
   }
 }
 
+const TRACKER_SCRIPT_MARKER = "data-betterlytics-tracker";
+
+// Not the "analytics.js" filename: Segment and legacy GA load a script with that name too
 function isInitialized() {
-  return Boolean(document.querySelector('script[src*="analytics.js"]'));
+  return (
+    window.__betterlytics_analytics_initialized__ === true ||
+    document.querySelector(`script[${TRACKER_SCRIPT_MARKER}]`) !== null
+  );
 }
 
 function setupPreinitalizedQueue() {
@@ -128,6 +136,7 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
   const script = document.createElement("script");
   script.async = true;
   script.src = config.scriptUrl;
+  script.setAttribute(TRACKER_SCRIPT_MARKER, "");
   script.setAttribute("data-site-id", config.siteId);
   script.setAttribute("data-server-url", config.serverUrl);
   script.setAttribute("data-dynamic-urls", config.dynamicUrls.join(","));

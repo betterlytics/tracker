@@ -1,7 +1,7 @@
 {
   "name": "@betterlytics/tracker",
   "version": "0.2.3",
-  "description": "Privacy-focused, cookieless analytics for your website",
+  "description": "Cookieless tracker for Betterlytics: web analytics, session replay, error tracking and Core Web Vitals.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -43,6 +43,9 @@
     "cookieless",
     "tracking",
     "web-analytics",
+    "session-replay",
+    "error-tracking",
+    "web-vitals",
     "betterlytics"
   ],
   "author": "Betterlytics",

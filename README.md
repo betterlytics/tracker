@@ -1,6 +1,6 @@
 # @betterlytics/tracker
 
-Privacy-focused, cookieless analytics for your website. Simple integration with just a few lines of code.
+Cookieless tracker for [Betterlytics](https://betterlytics.io): web analytics, session replay, error tracking and Core Web Vitals from one script.
 
 ## Installation
 

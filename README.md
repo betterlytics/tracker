@@ -161,6 +161,18 @@ betterlytics.init("your-site-id", {
 });
 ```
 
+### Heatmaps
+
+Heatmaps are disabled by default. [Heatmaps in our documentation](https://betterlytics.io/docs/integration/heatmaps).
+
+To enable heatmaps:
+
+```javascript
+betterlytics.init("your-site-id", {
+  enableHeatmaps: true,
+});
+```
+
 ### Global Properties
 
 Global properties are a flat key/value map attached automatically to every event sent from the client. Unlike per-event custom properties, they persist across all events and are ideal for stable identifiers like user plan tier, app version, or feature flag cohort. [Global Properties in our documentation](https://betterlytics.io/docs/integration/global-properties).
@@ -215,6 +227,7 @@ Values must be `string`, `number`, or `boolean`. Invalid values are skipped with
 - `trackErrors`: Boolean value for enabling error tracking (defaults to `false`)
 - `trackConsoleErrors`: Boolean value for capturing `console.error()` calls. Requires `trackErrors` to be `true` (defaults to `false`)
 - `replayOnError`: Boolean value for capturing a replay when an error occurs, even for sessions not sampled for regular recording. Requires `enableSessionReplay` and consent (defaults to `false`)
+- `enableHeatmaps`: Boolean value for recording clicks for heatmaps (defaults to `false`)
 - `globalProperties`: Flat key/value map (`Record<string, string | number | boolean>`) attached to every event (defaults to `{}`)
 - `debug`: Boolean value for console warnings (defaults to `false`)
 

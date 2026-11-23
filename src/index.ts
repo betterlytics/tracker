@@ -33,6 +33,8 @@ export interface BetterlyticsConfig {
   replayOnError?: boolean;
   /** Records clicks for heatmaps */
   enableHeatmaps?: boolean;
+  /** Percent of page views that record clicks (0-100, defaults to 100) */
+  heatmapSample?: number;
   /** Flat key/value map attached to every event (e.g. { plan: "premium", app_version: "2.1.0" }) */
   globalProperties?: GlobalProperties;
   /** Debug */
@@ -121,6 +123,7 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     trackConsoleErrors: options.trackConsoleErrors || false,
     replayOnError: options.replayOnError || false,
     enableHeatmaps: options.enableHeatmaps || false,
+    heatmapSample: options.heatmapSample ?? 100,
     globalProperties: options.globalProperties || {},
   };
 
@@ -167,6 +170,7 @@ function init(siteId: string, options: BetterlyticsConfig = {}) {
     config.trackConsoleErrors.toString(),
   );
   script.setAttribute("data-heatmaps", config.enableHeatmaps.toString());
+  script.setAttribute("data-heatmap-sample", config.heatmapSample.toString());
   script.setAttribute(
     "data-global-properties",
     JSON.stringify(config.globalProperties),
